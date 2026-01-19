@@ -1,113 +1,120 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# TradeCore - Enterprise E-Commerce API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Modern, scalable, and secure headless e-commerce API platform built with production-ready architecture.
 
-## Description
+## 🚀 Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- ✅ **Authentication System** - JWT-based auth with role management
+- ✅ **Database Management** - PostgreSQL with Prisma ORM
+- ✅ **API Documentation** - Auto-generated Swagger docs
+- ✅ **Validation** - DTO-based request validation
+- ✅ **Security** - Password hashing, JWT guards, CORS
+- 🔄 **Product Management** (Coming Soon)
+- 🔄 **Order System** (Coming Soon)
+- 🔄 **Admin Panel** (Coming Soon)
 
-## Project setup
+## 🛠️ Tech Stack
 
+| Technology | Purpose |
+|------------|---------|
+| NestJS | Backend framework |
+| TypeScript | Programming language |
+| PostgreSQL | Database |
+| Prisma | ORM |
+| Passport.js | Authentication |
+| JWT | Token management |
+| Swagger | API documentation |
+| Docker | Containerization |
+
+## 📦 Installation
+
+### Prerequisites
+
+- Node.js 18+
+- Docker & Docker Compose
+- npm or yarn
+
+### Setup
 ```bash
-$ npm install
+# Clone repository
+git clone https://github.com/YOUR_USERNAME/tradecore-ecommerce-api.git
+cd tradecore-ecommerce-api/backend
+
+# Install dependencies
+npm install
+
+# Start PostgreSQL
+docker-compose up -d
+
+# Run migrations
+npx prisma migrate dev
+
+# Start development server
+npm run start:dev
 ```
 
-## Compile and run the project
+## 🔑 Environment Variables
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-### Environment variables
-
-Create a `.env` file in `backend/` before starting the app:
-
-```
+Create `.env` file:
+```env
 DATABASE_URL="postgresql://tradecore:tradecore123@localhost:5432/tradecore_db"
-PORT=3000
+JWT_SECRET="your-secret-key"
+JWT_EXPIRES_IN="15m"
 ```
 
-You can launch Postgres locally with Docker:
+## 📚 API Documentation
 
+After starting the server, visit:
+```
+http://localhost:3000/api/docs
+```
+
+## 🧪 Testing Endpoints
+
+### Register User
 ```bash
-docker compose up -d
+POST /auth/register
+{
+  "email": "user@example.com",
+  "password": "SecurePass123!",
+  "firstName": "John",
+  "lastName": "Doe"
+}
 ```
 
-## Run tests
-
+### Login
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+POST /auth/login
+{
+  "email": "user@example.com",
+  "password": "SecurePass123!"
+}
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### Get Profile (Protected)
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+GET /auth/profile
+Headers: Authorization: Bearer <your_token>
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 🗺️ Project Roadmap
 
-## Resources
+- [x] Phase 1: Authentication & Security
+- [ ] Phase 2: Product Management
+- [ ] Phase 3: Order System
+- [ ] Phase 4: Admin Panel
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📝 License
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+MIT
 
-## Support
+## 👨‍💻 Author
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**Your Name**
+- GitHub: [@yourhandle](https://github.com/yourhandle)
+- LinkedIn: [Your Profile](https://linkedin.com/in/yourprofile)
