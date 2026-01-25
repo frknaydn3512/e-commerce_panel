@@ -11,6 +11,9 @@ npm-debug.log*
 dist/
 build/
 
+# Multer
+uploads/
+
 # IDE
 .vscode/
 .idea/

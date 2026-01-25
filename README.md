@@ -101,20 +101,3 @@ POST /auth/login
 GET /auth/profile
 Headers: Authorization: Bearer <your_token>
 ```
-
-## 🗺️ Project Roadmap
-
-- [x] Phase 1: Authentication & Security
-- [ ] Phase 2: Product Management
-- [ ] Phase 3: Order System
-- [ ] Phase 4: Admin Panel
-
-## 📝 License
-
-MIT
-
-## 👨‍💻 Author
-
-**Your Name**
-- GitHub: [@yourhandle](https://github.com/yourhandle)
-- LinkedIn: [Your Profile](https://linkedin.com/in/yourprofile)
