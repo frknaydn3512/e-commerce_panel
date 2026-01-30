@@ -1,5 +1,22 @@
 # TradeCore - Enterprise E-Commerce API
 
+🚀 **Live Demo:** https://tradecore-api.onrender.com  
+📚 **API Documentation:** https://tradecore-api.onrender.com/api/docs
+
+Enterprise-grade headless e-commerce API built with NestJS, PostgreSQL, and Prisma.
+
+## 🌐 Deployment
+
+- **Backend:** Render.com
+- **Database:** Supabase (PostgreSQL)
+- **Region:** Europe (Frankfurt)
+
+## 🔗 Quick Links
+
+- [Live API](https://tradecore-api.onrender.com)
+- [Swagger Docs](https://tradecore-api.onrender.com/api/docs)
+- [Supabase Dashboard](https://supabase.com/dashboard)
+
 ![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
