@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Request,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
@@ -47,15 +48,15 @@ const imageFileFilter = (req, file, callback) => {
 @ApiTags('Products')
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create product (Admin/Editor only)' })
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  create(@Body() createProductDto: CreateProductDto, @Request() req) {
+    return this.productsService.create(createProductDto, req.user.id);
   }
 
   @Get()
@@ -132,11 +133,14 @@ export class ProductsController {
       throw new BadRequestException('File is required');
     }
 
+    // Convert isPrimary to boolean since FormData sends it as string
+    const isPrimaryBool = String(addImageDto.isPrimary) === 'true';
+
     return this.productsService.addImage(
       productId,
       file.filename,
       addImageDto.altText,
-      addImageDto.isPrimary,
+      isPrimaryBool,
     );
   }
 

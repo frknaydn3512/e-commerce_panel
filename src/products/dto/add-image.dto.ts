@@ -8,7 +8,7 @@ export class AddImageDto {
   @IsOptional()
   altText?: string;
 
-  @ApiProperty({ example: false, required: false , default: false})
+  @ApiProperty({ example: false, required: false, default: false })
   @IsBoolean()
   @IsOptional()
   @Transform(({ value }) => {
@@ -17,4 +17,7 @@ export class AddImageDto {
     return value;
   })
   isPrimary?: boolean = false;
+  @ApiProperty({ type: 'string', format: 'binary', required: true })
+  @IsOptional()
+  file?: any;
 }

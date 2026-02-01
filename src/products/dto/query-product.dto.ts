@@ -22,6 +22,11 @@ export class QueryProductDto {
   @IsUUID()
   categoryId?: string;
 
+  @ApiProperty({ required: false, example: 'user-uuid' })
+  @IsOptional()
+  @IsUUID()
+  sellerId?: string;
+
   @ApiProperty({ required: false, example: 100 })
   @IsOptional()
   @Type(() => Number)

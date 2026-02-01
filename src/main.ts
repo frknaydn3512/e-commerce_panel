@@ -4,10 +4,16 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import helmet from 'helmet';
 
 async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Security headers
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // Allow resource loading (images)
+  }));
 
   // Global validation pipe
   app.useGlobalPipes(new ValidationPipe({
@@ -17,10 +23,13 @@ async function bootstrap() {
   }));
 
   // CORS
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:5173', // Restrict to frontend dev server
+    credentials: true,
+  });
 
-  // Static files (resimler için)
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+  // Static files
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/uploads/',
   });
   // Swagger documentation
@@ -30,7 +39,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 

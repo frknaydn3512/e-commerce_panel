@@ -24,9 +24,15 @@ export class CreateProductDto {
   @Type(() => Number)
   stock: number;
 
-  @ApiProperty({ example: 'category-uuid' })
+  @ApiProperty({ example: 'category-uuid', required: false })
   @IsUUID()
-  categoryId: string;
+  @IsOptional()
+  categoryId?: string;
+
+  @ApiProperty({ example: 'Electronics', required: false })
+  @IsString()
+  @IsOptional()
+  categoryName?: string;
 
   @ApiProperty({ example: true, required: false })
   @IsBoolean()

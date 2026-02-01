@@ -6,7 +6,7 @@ import { QueryProductDto } from './dto/query-product.dto';
 
 @Injectable()
 export class ProductsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   // Slug oluşturma
   private generateSlug(name: string): string {
@@ -18,16 +18,51 @@ export class ProductsService {
       .replace(/^-+|-+$/g, '');
   }
 
-  async create(createProductDto: CreateProductDto) {
-    const { name, description, price, stock, categoryId, isActive } = createProductDto;
+  async create(createProductDto: CreateProductDto, sellerId?: string) {
+    const { name, description, price, stock, categoryId: inputCategoryId, categoryName, isActive } = createProductDto;
 
-    // Kategori var mı kontrol et
-    const category = await this.prisma.category.findUnique({
-      where: { id: categoryId },
-    });
+    let finalCategoryId = inputCategoryId;
 
-    if (!category) {
-      throw new NotFoundException('Category not found');
+    // Kategori mantığı
+    if (!finalCategoryId && categoryName) {
+      const categorySlug = this.generateSlug(categoryName);
+
+      // Kategori var mı?
+      const existingCategory = await this.prisma.category.findFirst({
+        where: {
+          OR: [
+            { slug: categorySlug },
+            { name: categoryName } // Case-sensitive or adjust as needed, but slug is safer
+          ]
+        }
+      });
+
+      if (existingCategory) {
+        finalCategoryId = existingCategory.id;
+      } else {
+        // Yoksa oluştur
+        const newCategory = await this.prisma.category.create({
+          data: {
+            name: categoryName,
+            slug: categorySlug,
+          }
+        });
+        finalCategoryId = newCategory.id;
+      }
+    }
+
+    if (!finalCategoryId) {
+      throw new BadRequestException('CategoryId or CategoryName is required');
+    }
+
+    // Kategoru ID elimizde, kontrol edelim (inputCategoryId verildiyse diye)
+    // Gerçi yukarıda create ettik veya bulduk, ama inputCategoryId verildiyse kontrol etmekte fayda var
+    // Optimizasyon: Zaten yukarıda create ettiysek valid. Sadece direkt ID verildiyse check edelim.
+    if (inputCategoryId) {
+      const category = await this.prisma.category.findUnique({
+        where: { id: finalCategoryId },
+      });
+      if (!category) throw new NotFoundException('Category not found');
     }
 
     // Slug oluştur
@@ -50,12 +85,21 @@ export class ProductsService {
         description,
         price,
         stock,
-        categoryId,
+        category: { connect: { id: finalCategoryId } },
         isActive: isActive ?? true,
+        seller: sellerId ? { connect: { id: sellerId } } : undefined,
       },
       include: {
         category: true,
         images: true,
+        seller: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          }
+        }
       },
     });
   }
@@ -99,6 +143,11 @@ export class ProductsService {
       where.stock = { gt: 0 };
     }
 
+    // Add sellerId filter if present in query (cast to any to avoid strict DTO check if not updated yet)
+    if ((query as any).sellerId) {
+      where.sellerId = (query as any).sellerId;
+    }
+
     // Pagination
     const skip = (page - 1) * limit;
     const take = limit;
@@ -116,6 +165,14 @@ export class ProductsService {
         orderBy,
         include: {
           category: true,
+          seller: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            }
+          },
           images: {
             where: { isPrimary: true },
             take: 1,
@@ -150,6 +207,14 @@ export class ProductsService {
             isPrimary: 'desc',
           },
         },
+        seller: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          }
+        },
       },
     });
 
@@ -173,6 +238,14 @@ export class ProductsService {
           orderBy: {
             isPrimary: 'desc',
           },
+        },
+        seller: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          }
         },
       },
     });

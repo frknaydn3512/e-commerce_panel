@@ -31,8 +31,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  orders Order[]
-  cart Cart?
+  orders   Order[]
+  products Product[] @relation("ProductSeller")
+  cart     Cart?
 
   @@map("users")
 }
@@ -65,12 +66,15 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   category   Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  seller     User?          @relation("ProductSeller", fields: [sellerId], references: [id])
+  sellerId   String?
   images     ProductImage[]
   orderItems OrderItem[]
   cartItems CartItem[]
 
   @@index([categoryId])
   @@index([slug])
+  @@index([sellerId])
   @@map("products")
 }
 
