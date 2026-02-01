@@ -22,12 +22,12 @@ import { UserRole } from '@prisma/client';
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly ordersService: OrdersService) { }
 
   @Post()
   @ApiOperation({ summary: 'Create order from cart' })
   createFromCart(@CurrentUser() user: any, @Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.createFromCart(user.userId, createOrderDto);
+    return this.ordersService.createFromCart(user.id, createOrderDto);
   }
 
   @Get()
@@ -36,7 +36,7 @@ export class OrdersController {
     if (user.role === UserRole.ADMIN) {
       return this.ordersService.findAll();
     }
-    return this.ordersService.findAllByUser(user.userId);
+    return this.ordersService.findAllByUser(user.id);
   }
 
   @Get('statistics')
@@ -51,7 +51,7 @@ export class OrdersController {
   @ApiOperation({ summary: 'Get order by ID' })
   findOne(@Param('id') id: string, @CurrentUser() user: any) {
     // Admin hepsini görebilir, user sadece kendisininkini
-    const userId = user.role === UserRole.ADMIN ? undefined : user.userId;
+    const userId = user.role === UserRole.ADMIN ? undefined : user.id;
     return this.ordersService.findOne(id, userId);
   }
 

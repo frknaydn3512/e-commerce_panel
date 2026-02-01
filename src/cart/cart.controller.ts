@@ -20,18 +20,19 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartService) { }
 
   @Get()
   @ApiOperation({ summary: 'Get current user cart' })
   getCart(@CurrentUser() user: any) {
-    return this.cartService.getOrCreateCart(user.userId);
+    return this.cartService.getOrCreateCart(user.id);
   }
 
   @Post('items')
   @ApiOperation({ summary: 'Add item to cart' })
   addItem(@CurrentUser() user: any, @Body() addToCartDto: AddToCartDto) {
-    return this.cartService.addItem(user.userId, addToCartDto);
+    console.log('DEBUG USER OBJECT:', user);
+    return this.cartService.addItem(user.id, addToCartDto);
   }
 
   @Patch('items/:itemId')
@@ -41,18 +42,18 @@ export class CartController {
     @Param('itemId') itemId: string,
     @Body() updateCartItemDto: UpdateCartItemDto,
   ) {
-    return this.cartService.updateItem(user.userId, itemId, updateCartItemDto);
+    return this.cartService.updateItem(user.id, itemId, updateCartItemDto);
   }
 
   @Delete('items/:itemId')
   @ApiOperation({ summary: 'Remove item from cart' })
   removeItem(@CurrentUser() user: any, @Param('itemId') itemId: string) {
-    return this.cartService.removeItem(user.userId, itemId);
+    return this.cartService.removeItem(user.id, itemId);
   }
 
   @Delete()
   @ApiOperation({ summary: 'Clear cart' })
   clearCart(@CurrentUser() user: any) {
-    return this.cartService.clearCart(user.userId);
+    return this.cartService.clearCart(user.id);
   }
 }
