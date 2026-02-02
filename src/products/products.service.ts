@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {  NotFoundException, BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -307,9 +307,14 @@ export class ProductsService {
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string, userId: string, userRole: string) {
     // Ürün var mı kontrol et
-    await this.findOne(id);
+    const product = await this.findOne(id);
+
+    // Admin değilse ve ürünün sahibi değilse hata ver
+    if (userRole !== 'ADMIN' && product.sellerId !== userId) {
+      throw new ForbiddenException('You can only delete your own products');
+    }
 
     return this.prisma.product.delete({
       where: { id },

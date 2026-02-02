@@ -88,11 +88,11 @@ export class ProductsController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete product (Admin only)' })
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(id);
+  @ApiOperation({ summary: 'Delete product (Admin or Owner)' })
+  remove(@Param('id') id: string, @Request() req) {
+    return this.productsService.remove(id, req.user.id, req.user.role);
   }
   @Post(':id/images')
   @UseGuards(JwtAuthGuard, RolesGuard)
