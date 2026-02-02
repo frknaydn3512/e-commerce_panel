@@ -23,8 +23,14 @@ async function bootstrap() {
   }));
 
   // CORS
+  // CORS
+  const allowedOrigins = [
+    'http://localhost:5173',
+    process.env.FRONTEND_URL
+  ].filter((origin): origin is string => !!origin);
+
   app.enableCors({
-    origin: 'http://localhost:5173', // Restrict to frontend dev server
+    origin: allowedOrigins,
     credentials: true,
   });
 
